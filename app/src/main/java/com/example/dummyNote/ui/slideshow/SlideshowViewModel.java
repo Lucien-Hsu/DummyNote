@@ -1,4 +1,4 @@
-package com.example.dummylist.ui.slideshow;
+package com.example.dummyNote.ui.slideshow;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

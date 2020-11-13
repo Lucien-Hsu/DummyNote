@@ -1,4 +1,4 @@
-package com.example.dummylist.ui.home;
+package com.example.dummyNote.ui.home;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,13 +10,11 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.dummylist.DB;
-import com.example.dummylist.MainActivity;
-import com.example.dummylist.R;
+import com.example.dummyNote.MainActivity;
+import com.example.dummyNote.R;
 
 public class HomeFragment extends Fragment {
 

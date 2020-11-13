@@ -1,4 +1,4 @@
-package com.example.dummylist;
+package com.example.dummyNote;
 
 import org.junit.Test;
 
