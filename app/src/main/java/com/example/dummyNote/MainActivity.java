@@ -3,10 +3,15 @@ package com.example.dummyNote;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     private DB mDB;
     //取資料用的cursor
     private Cursor cursor;
+    //
+    private long index;
+
+    final String input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,31 +99,66 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context, "新增:" + "項目" + count, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_delete_item:
-                //TODO 刪除項目
-                long id_delete = 3;
-                if(mDB.delete(id_delete)){
+                //刪除項目
+                if(mDB.delete(index)){
                     //從資料庫取得最新cursor後，更換SimpleCursorAdapter的cursor
                     //因為SimpleCursorAdapter是參照物件，因此這邊改變cursor會直接更新listView
                     sca.changeCursor(getCursor());
                     //挑出提示
-                    Toast.makeText(context, "刪除:" + "項目" + id_delete, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "刪除:" + "項目" + index, Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(context, "刪除失敗", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_update_item:
-                //TODO 更新項目
-                long id_update = 5;
-                if(mDB.update(id_update, "更新項目")){
-                    //從資料庫取得最新cursor後，更換SimpleCursorAdapter的cursor
-                    //因為SimpleCursorAdapter是參照物件，因此這邊改變cursor會直接更新listView
-                    sca.changeCursor(getCursor());
-                    //挑出提示
-                    Toast.makeText(context, "更新:" + "項目" + id_update, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(context, "更新失敗", Toast.LENGTH_SHORT).show();
-                }
+                //更新項目
+
+                //建立彈出視窗給使用者輸入修改內容
+                //建立一個AlertDialog.Builder
+                AlertDialog.Builder builder= new AlertDialog.Builder(context);
+                //取得View，這裡設定為 res 中的 layout 中的 my_alertdialog.xml
+                final View myDialog = getLayoutInflater().inflate(R.layout.my_alertdialog, null);
+                //設定AlertDialog.Builder的View
+                builder.setView(myDialog);
+                //建立並顯示對話框
+                final AlertDialog dialog = builder.show();
+
+                //取得myDialog中的按鈕
+                Button btn = myDialog.findViewById(R.id.btn_confirm);
+                EditText et = myDialog.findViewById(R.id.et_input);
+                String inputStr = et.getText().toString();
+//                Log.d("mTest", "inputStr: " + inputStr);
+
+                //設定按鈕監聽器
+                btn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        EditText etInput = myDialog.findViewById(R.id.et_input);
+                        Log.d("mTest", "onClick: " + etInput);
+//                        Toast.makeText(context, "EditText:" + etInput, Toast.LENGTH_SHORT).show();
+                        input = etInput.getText().toString();
+//                        input.concat(etInput.getText().toString());
+//                        Toast.makeText(context, "已輸入:" + input, Toast.LENGTH_SHORT).show();
+                        Log.d("mTest", "已輸入:" + input);
+
+                        //更新
+                        if(mDB.update(index, input)){
+                            //從資料庫取得最新cursor後，更換SimpleCursorAdapter的cursor
+                            //因為SimpleCursorAdapter是參照物件，因此這邊改變cursor會直接更新listView
+                            sca.changeCursor(getCursor());
+                            //挑出提示
+                            Toast.makeText(context, "更新:" + "項目" + index, Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(context, "更新失敗", Toast.LENGTH_SHORT).show();
+                        }
+
+                        //關閉對話框
+                        dialog.dismiss();
+                    }
+                });
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,5 +181,10 @@ public class MainActivity extends AppCompatActivity {
     //用來讓Fragment設定MainActivity的adapter
     public void setAdapter(SimpleCursorAdapter sca){
         this.sca = sca;
+    }
+
+    //用來讓Fragment設定MainActivity的項目索引
+    public void setIndex(long index){
+        this.index = index;
     }
 }

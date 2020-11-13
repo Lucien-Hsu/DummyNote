@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,22 +21,12 @@ import com.example.dummyNote.R;
 
 public class HomeFragment extends Fragment {
     private Context context;
-
     private HomeViewModel homeViewModel;
-
     private ListView listViewHome;
-//    DB mDB;
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        mDB = new DB(getActivity());
-//        mDB.open();
-//    }
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MainActivity activity = (MainActivity)getActivity();
+        final MainActivity activity = (MainActivity)getActivity();
         context = activity;
 
         homeViewModel =
@@ -47,17 +38,6 @@ public class HomeFragment extends Fragment {
 
         //以root找到id
         listViewHome = root.findViewById(R.id.listview_home);
-//        //建立資料
-//        ArrayList data = new ArrayList();
-//        data.add("Android");
-//        data.add("Activity");
-//        data.add("Java");
-//        data.add("ListView");
-//        data.add("SQLite");
-//        //建立Adapter
-//        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, data);
-//        //連結Adapter
-//        listViewHome.setAdapter(adapter);
 
         setAdapter();
 
@@ -65,7 +45,13 @@ public class HomeFragment extends Fragment {
         listViewHome.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(context, "項目" + i, Toast.LENGTH_SHORT).show();
+                //把資料庫ID傳入
+                TextView tvID = view.findViewById(R.id.tv1);
+                long item_id = Long.parseLong(tvID.getText().toString());
+
+                Toast.makeText(context, "項目" + item_id, Toast.LENGTH_SHORT).show();
+                //將MainActivity的項目索引值更新
+                activity.setIndex(item_id);
             }
         });
 
