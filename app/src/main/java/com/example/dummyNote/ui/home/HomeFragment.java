@@ -1,5 +1,6 @@
 package com.example.dummyNote.ui.home;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ import com.example.dummyNote.MainActivity;
 import com.example.dummyNote.R;
 
 public class HomeFragment extends Fragment {
+    private Context context;
 
     private HomeViewModel homeViewModel;
 
@@ -32,8 +35,14 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        MainActivity activity = (MainActivity)getActivity();
+        context = activity;
+
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        //填充片段
+        //引數一為要用的 layout
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //以root找到id
@@ -56,7 +65,7 @@ public class HomeFragment extends Fragment {
         listViewHome.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Toast.makeText(context, "項目" + i, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -74,6 +83,7 @@ public class HomeFragment extends Fragment {
         //要放入的view
         int[] to = {R.id.tv1, R.id.tv2, R.id.tv3};
 
+        //建立適配器
         SimpleCursorAdapter sca = new SimpleCursorAdapter(
                 //context
                 getActivity(),
