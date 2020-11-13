@@ -89,5 +89,7 @@ public class HomeFragment extends Fragment {
 
         //連接Adapter
         listViewHome.setAdapter(sca);
+
+
     }
 }

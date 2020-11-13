@@ -30,7 +30,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="請輸入修改內容"
+        android:text="請輸入新增內容"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/et_input"
         app:layout_constraintStart_toStartOf="@+id/et_input"

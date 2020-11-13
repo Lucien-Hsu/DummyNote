@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
     //
     private long index;
 
-    final String input = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +89,47 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_item:
                 //新增項目
-                mDB.create("項目" + (++count));
-                //從資料庫取得最新cursor後，更換SimpleCursorAdapter的cursor
-                //因為SimpleCursorAdapter是參照物件，因此這邊改變cursor會直接更新listView
-                sca.changeCursor(getCursor());
-                //挑出提示
-                Toast.makeText(context, "新增:" + "項目" + count, Toast.LENGTH_SHORT).show();
+                //建立彈出視窗給使用者輸入修改內容
+                //建立一個AlertDialog.Builder
+                AlertDialog.Builder addBuilder= new AlertDialog.Builder(context);
+                //取得View，這裡設定為 res 中的 layout 中的 my_adddialog.xml
+                final View myAddDialog = getLayoutInflater().inflate(R.layout.my_adddialog, null);
+                //設定AlertDialog.Builder的View
+                addBuilder.setView(myAddDialog);
+                //建立並顯示對話框
+                final AlertDialog addDialog = addBuilder.show();
+
+                //取得myDialog中的按鈕
+                Button btnAdd = myAddDialog.findViewById(R.id.btn_confirm);
+
+                //設定按鈕監聽器
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        EditText etInput = myAddDialog.findViewById(R.id.et_input);
+                        Log.d("mTest", "onClick: " + etInput);
+                        //本地變數，OK
+                        String input = etInput.getText().toString();
+
+                        Log.d("mTest", "已輸入:" + input);
+
+                        //更新
+                        if(mDB.create(input) > 0){
+                            //從資料庫取得最新cursor後，更換SimpleCursorAdapter的cursor
+                            //因為SimpleCursorAdapter是參照物件，因此這邊改變cursor會直接更新listView
+                            sca.changeCursor(getCursor());
+                            //挑出提示
+                            Toast.makeText(context, "新增:" + input, Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(context, "新增失敗", Toast.LENGTH_SHORT).show();
+                        }
+
+                        //關閉對話框
+                        addDialog.dismiss();
+                    }
+                });
+
                 return true;
             case R.id.action_delete_item:
                 //刪除項目
@@ -115,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //建立彈出視窗給使用者輸入修改內容
                 //建立一個AlertDialog.Builder
-                AlertDialog.Builder builder= new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 //取得View，這裡設定為 res 中的 layout 中的 my_alertdialog.xml
                 final View myDialog = getLayoutInflater().inflate(R.layout.my_alertdialog, null);
                 //設定AlertDialog.Builder的View
@@ -125,9 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
                 //取得myDialog中的按鈕
                 Button btn = myDialog.findViewById(R.id.btn_confirm);
-                EditText et = myDialog.findViewById(R.id.et_input);
-                String inputStr = et.getText().toString();
-//                Log.d("mTest", "inputStr: " + inputStr);
 
                 //設定按鈕監聽器
                 btn.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +166,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         EditText etInput = myDialog.findViewById(R.id.et_input);
                         Log.d("mTest", "onClick: " + etInput);
-//                        Toast.makeText(context, "EditText:" + etInput, Toast.LENGTH_SHORT).show();
-                        input = etInput.getText().toString();
-//                        input.concat(etInput.getText().toString());
+                        //本地變數，OK
+                        String input = etInput.getText().toString();
+
+
 //                        Toast.makeText(context, "已輸入:" + input, Toast.LENGTH_SHORT).show();
                         Log.d("mTest", "已輸入:" + input);
 
