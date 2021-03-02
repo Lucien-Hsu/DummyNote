@@ -1,4 +1,7 @@
 # DummyNote
+
+![image](https://github.com/Lucien-Hsu/DummyNote/blob/master/DummyNote.jpg?raw=true)
+
 一個簡單的記事 APP。
 
 點選"+號"可新增筆記。
