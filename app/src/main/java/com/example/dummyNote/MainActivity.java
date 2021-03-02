@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private DB mDB;
     //取資料用的cursor
     private Cursor cursor;
-    //
+    
     private long index;
 
     @Override
@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //??
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
