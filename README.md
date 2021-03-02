@@ -10,7 +10,7 @@
 
 點選筆記後點"鉛筆符號"可修改筆記。
 # 主要技術
-SQLiteDatabase、SQLiteOpenHelper、ListView。
+SQLiteDatabase、SQLiteOpenHelper、ListView、Menu。
 
 # 架構說明
 本 APP 自訂一個處理資料庫的類別，將資料庫相關的 SQLiteDatabase、SQLiteOpenHelper 操作都放與此類別中。
